@@ -13,6 +13,7 @@ outputs:
   new-version:
     description: |
       The calculated version number based on the provided release type.
+    value: new-version
 runs:
   using: 'composite'
   steps:
@@ -45,9 +46,12 @@ runs:
           MINOR=0
           PATCH=0
         elif [ "$RELEASE_TYPE" = "minor" ]; then
+          MAJOR=$major
           MINOR=$((MINOR+1))
           PATCH=0
         elif [ "$RELEASE_TYPE" = "patch" ]; then
+          MAJOR=$major
+          MINOR=$minor
           PATCH=$((PATCH+1))
         fi
 

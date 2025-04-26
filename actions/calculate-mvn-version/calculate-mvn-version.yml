@@ -1,0 +1,49 @@
+name: Calculate Maven Version
+description: |
+  This action calculates the version of a Maven project based on the provided versioning strategy.
+  It can be used to determine the next version number for a release or snapshot build.
+inputs:
+  release-type:
+    description: |
+      The type of release to calculate the version for. 
+      Options are 'major', 'minor' or 'patch'.
+    required: true
+    default: 'patch'
+outputs:
+  new-version:
+    description: |
+      The calculated version number based on the provided release type.
+    required: true
+runs:
+  using: 'bash'
+  steps:
+    - run: |
+        #!/bin/bash
+        set -e
+
+        RELEASE_TYPE="${{ inputs.release-type }}"
+        echo "Release type: $RELEASE_TYPE"
+
+        # Get the current version from pom.xml
+        current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+
+        # Split the version into its components
+        IFS='.' read -r major minor patch <<< "$current_version"
+
+        # Calculate the new version based on the release type
+
+        if [ "$RELEASE_TYPE" = "major" ]; then
+          MAJOR=$((MAJOR+1))
+          MINOR=0
+          PATCH=0
+        elif [ "$RELEASE_TYPE" = "minor" ]; then
+          MINOR=$((MINOR+1))
+          PATCH=0
+        elif [ "$RELEASE_TYPE" = "patch" ]; then
+          PATCH=$((PATCH+1))
+        fi
+
+        NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+        echo "Next version: $NEW_VERSION"
+
+        echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT

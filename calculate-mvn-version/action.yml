@@ -33,6 +33,10 @@ runs:
 
         # Split the version into its components
         IFS='.' read -r major minor patch <<< "$current_version"
+        
+        echo "Major: $major"
+        echo "Minor: $minor"
+        echo "Patch: $patch"
 
         # Calculate the new version based on the release type
 

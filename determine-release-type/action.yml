@@ -1,0 +1,26 @@
+name: Determine Release Type
+description: |
+  This action determines the release type (major, minor, patch) based on PR labels.
+inputs: {}
+outputs:
+  type:
+    description: |
+      The release type determined from PR labels (major, minor, patch).
+    value: ${{ steps.determine_release_type.outputs.type }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Determine release type
+      id: determine_release_type
+      shell: bash
+      run: |
+        if echo "${{ toJson(github.event.pull_request.labels) }}" | grep -q 'release-type/major'; then
+          echo "type=major" >> $GITHUB_OUTPUT
+        elif echo "${{ toJson(github.event.pull_request.labels) }}" | grep -q 'release-type/minor'; then
+          echo "type=minor" >> $GITHUB_OUTPUT
+        elif echo "${{ toJson(github.event.pull_request.labels) }}" | grep -q 'release-type/patch'; then
+          echo "type=patch" >> $GITHUB_OUTPUT
+        else
+          echo "No release-type label found."
+          exit 1
+        fi

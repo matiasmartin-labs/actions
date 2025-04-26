@@ -35,24 +35,24 @@ runs:
         # Split the version into its components
         IFS='.' read -r major minor patch <<< "$current_version"
         
-        echo "Major: $major"
-        echo "Minor: $minor"
-        echo "Patch: $patch"
+        echo "Current Major: $major"
+        echo "Current Minor: $minor"
+        echo "Current Patch: $patch"
 
         # Calculate the new version based on the release type
 
         if [ "$RELEASE_TYPE" = "major" ]; then
-          MAJOR=$((MAJOR+1))
+          MAJOR=$((major+1))
           MINOR=0
           PATCH=0
         elif [ "$RELEASE_TYPE" = "minor" ]; then
           MAJOR=$major
-          MINOR=$((MINOR+1))
+          MINOR=$((minor+1))
           PATCH=0
         elif [ "$RELEASE_TYPE" = "patch" ]; then
           MAJOR=$major
           MINOR=$minor
-          PATCH=$((PATCH+1))
+          PATCH=$((patch+1))
         fi
 
         NEW_VERSION="$MAJOR.$MINOR.$PATCH"

@@ -14,9 +14,12 @@ outputs:
     description: |
       The calculated version number based on the provided release type.
 runs:
-  using: 'bash'
+  using: 'composite'
   steps:
-    - run: |
+    - name: Calculate Version
+      shell: bash
+      id: calculate-version
+      run: |
         #!/bin/bash
         set -e
 

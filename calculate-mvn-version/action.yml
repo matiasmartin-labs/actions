@@ -29,6 +29,8 @@ runs:
         # Get the current version from pom.xml
         current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
+        echo "Current version: $current_version"
+
         # Split the version into its components
         IFS='.' read -r major minor patch <<< "$current_version"
 

@@ -52,7 +52,7 @@ runs:
       shell: bash
       id: download-k8s-renderer
       run: |
-        curl -L -o ./k8s-renderer https://github.com/matiasmartin-labs/k8s-render/releases/download/v1.0.1/k8s-render
+        curl -L -o ./k8s-renderer https://github.com/matiasmartin-labs/k8s-render/releases/download/v1.0.2/k8s-render
         chmod +x ./k8s-renderer
     
     - name: Render Kubernetes Manifests

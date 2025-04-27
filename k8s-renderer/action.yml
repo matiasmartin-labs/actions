@@ -56,7 +56,7 @@ runs:
         
         tar -xzvf ./release-package.tar.gz -C ./
 
-        chmod +x ./k8s-renderer
+        chmod +x ./k8s-render
     
     - name: Render Kubernetes Manifests
       shell: bash

@@ -65,27 +65,17 @@ runs:
         #!/bin/bash
         set -e
 
-        INPUT_DIR="${{ inputs.input-dir }}"
-        OUTPUT_DIR="${{ inputs.output-dir }}"
-        LOG_LEVEL="${{ inputs.log-level }}"
-        COMMIT_SHA="${{ inputs.commit-sha }}"
-        VCS_URL="${{ inputs.vcs-url }}"
-        VERSION="${{ inputs.version }}"
-        DOCKER_REGISTRY="${{ inputs.docker-registry }}"
-        IMAGE_PULL_SECRET="${{ inputs.image-pull-secret }}"
-        BRANCH="${{ inputs.branch }}"
-
-        echo "Rendering Kubernetes manifests from $INPUT_DIR to $OUTPUT_DIR"
+        echo "Rendering Kubernetes manifests from ${{ inputs.input-dir }} to ${{ inputs.output-dir }}"
         
         ./k8s-render render \
-          --input "$INPUT_DIR" \
-          --output "$OUTPUT_DIR" \
-          --log-level "$LOG_LEVEL" \
-          --var CommitSHA="$COMMIT_SHA" \
-          --var VCSURL="$VCS_URL" \
-          --var BuildVersion="$VERSION" \
-          --var DockerRegistry="$DOCKER_REGISTRY" \
-          --var ImagePullSecret="$IMAGE_PULL_SECRET" \
-          --var Branch="$BRANCH"
+          --input "${{ inputs.input-dir }}" \
+          --output "${{ inputs.output-dir }}" \
+          --log-level "${{ inputs.log-level }}" \
+          --var CommitSHA="${{ inputs.commit-sha }}" \
+          --var VCSURL="${{ inputs.vcs-url }}" \
+          --var BuildVersion="${{ inputs.version }}" \
+          --var DockerRegistry="${{ inputs.docker-registry }}" \
+          --var ImagePullSecret="${{ inputs.image-pull-secret }}" \
+          --var Branch="${{ inputs.branch }}"
 
         echo "Rendered Kubernetes manifests to $OUTPUT_DIR"

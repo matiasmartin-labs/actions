@@ -1,0 +1,88 @@
+name: K8S Renderer
+description: |
+  This action renders Kubernetes manifests using Helm and Kustomize.
+  It can be used to generate the final Kubernetes YAML files for deployment.
+inputs:
+  input-dir:
+    description: |
+      The directory containing the input file for rendering. platform.yaml
+    required: true
+    default: './k8s'
+  output-dir:
+    description: |
+      The directory where the rendered output files will be saved.
+    required: true
+    default: './k8s/manifests'
+  log-level:
+    description: |
+      The log level for the rendering process. Options are 'debug', 'info', 'warn', 'error'.
+    required: false
+    default: 'info'
+  commit-sha:
+    description: |
+      The commit SHA of the current build. This is used to tag the rendered output.
+    required: true
+    default: '${{ github.sha }}'
+  vcs-url:
+    description: |
+      The URL of the version control system. This is used to tag the rendered output.
+    required: true
+    default: '${{ github.repository }}'
+  version:
+    description: |
+      The version of the application. This is used to tag the rendered output.
+    required: true
+  docker-registry:
+    description: |
+      The Docker registry to use for the rendered output. This is used to tag the rendered output.
+    required: true
+  image-pull-secret:
+    description: |
+      The image pull secret to use for the rendered output. This is used to tag the rendered output.
+    required: true
+  branch:
+    description: |
+      The branch of the repository. This is used to tag the rendered output.
+    required: true
+    default: '${{ github.ref }}'
+runs:
+  using: 'composite'
+  steps:
+    - name: Download k8s-renderer
+      shell: bash
+      id: download-k8s-renderer
+      run: |
+        curl -L -o ./k8s-renderer https://github.com/matiasmartin-labs/k8s-render/releases/download/v1.0.0/k8s-render
+        chmod +x ./k8s-renderer
+    
+    - name: Render Kubernetes Manifests
+      shell: bash
+      id: render-manifests
+      run: |
+        #!/bin/bash
+        set -e
+
+        INPUT_DIR="${{ inputs.input-dir }}"
+        OUTPUT_DIR="${{ inputs.output-dir }}"
+        LOG_LEVEL="${{ inputs.log-level }}"
+        COMMIT_SHA="${{ inputs.commit-sha }}"
+        VCS_URL="${{ inputs.vcs-url }}"
+        VERSION="${{ inputs.version }}"
+        DOCKER_REGISTRY="${{ inputs.docker-registry }}"
+        IMAGE_PULL_SECRET="${{ inputs.image-pull-secret }}"
+        BRANCH="${{ inputs.branch }}"
+
+        echo "Rendering Kubernetes manifests from $INPUT_DIR to $OUTPUT_DIR"
+        
+        ./k8s-renderer render \
+          --input "$INPUT_DIR" \
+          --output "$OUTPUT_DIR" \
+          --log-level "$LOG_LEVEL" \
+          --var CommitSHA="$COMMIT_SHA" \
+          --var VCSURL="$VCS_URL" \
+          --var BuildVersion="$VERSION" \
+          --var DockerRegistry="$DOCKER_REGISTRY" \
+          --var ImagePullSecret="$IMAGE_PULL_SECRET" \
+          --var Branch="$BRANCH"
+
+        echo "Rendered Kubernetes manifests to $OUTPUT_DIR"

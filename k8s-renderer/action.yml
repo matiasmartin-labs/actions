@@ -77,7 +77,7 @@ runs:
 
         echo "Rendering Kubernetes manifests from $INPUT_DIR to $OUTPUT_DIR"
         
-        ./k8s-renderer render \
+        ./k8s-render render \
           --input "$INPUT_DIR" \
           --output "$OUTPUT_DIR" \
           --log-level "$LOG_LEVEL" \

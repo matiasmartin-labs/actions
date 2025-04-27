@@ -14,6 +14,10 @@ outputs:
     description: |
       The calculated version number based on the provided release type.
     value: ${{ steps.calculate-version.outputs.new-version }}
+  new-version-tag:
+    description: |
+      The calculated version number with 'v' prefix based on the provided release type.
+    value: ${{ steps.calculate-version.outputs.new-version-tag }}
 runs:
   using: 'composite'
   steps:
@@ -59,3 +63,4 @@ runs:
         echo "Next version: $NEW_VERSION"
 
         echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "new-version-tag=v$NEW_VERSION" >> $GITHUB_OUTPUT

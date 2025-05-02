@@ -14,7 +14,7 @@ runs:
       id: determine_release_type
       shell: bash
       run: |
-        if ${{ github.event.inputs.bump }}; then
+        if [[ -n "$bump" && ("$bump" == "major" || "$bump" == "minor" || "$bump" == "patch") ]]; then
           echo "Release type: ${{ github.event.inputs.bump }}"
           echo "type=${{ github.event.inputs.bump }}" >> $GITHUB_OUTPUT
           exit 0

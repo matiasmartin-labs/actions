@@ -10,6 +10,12 @@ inputs:
       Options are 'major', 'minor' or 'patch'.
     required: true
     default: 'patch'
+  is-snapshot:
+    description: |
+      Whether the version is a snapshot version. 
+      If true, the version will be suffixed with '-SNAPSHOT'.
+    required: false
+    default: 'false'
 outputs:
   new-version:
     description: |
@@ -25,7 +31,7 @@ runs:
     - name: Fetch all tags
       shell: bash
       run: git fetch --tags
-      
+
     - name: Get latest tag
       id: get-latest-tag
       shell: bash
@@ -78,7 +84,12 @@ runs:
           PATCH=$((patch+1))
         fi
 
+        # Check if the version is a snapshot version
         NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+        if [ "${{ inputs.is-snapshot }}" = "true" ]; then
+          NEW_VERSION="$NEW_VERSION-SNAPSHOT"
+        fi
+
         echo "Next version: $NEW_VERSION"
         # Set the new version as output
         echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT

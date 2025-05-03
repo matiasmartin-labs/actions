@@ -52,7 +52,7 @@ runs:
       shell: bash
       id: download-k8s-renderer
       run: |
-        curl -L -o ./release-package.tar.gz https://github.com/matiasmartin-labs/k8s-render/releases/download/v1.4.1/release-package.tar.gz
+        curl -L -o ./release-package.tar.gz https://github.com/matiasmartin-labs/k8s-render/releases/download/v1.4.2/release-package.tar.gz
         
         tar -xzvf ./release-package.tar.gz -C ./
 
